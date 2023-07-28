@@ -1,44 +1,34 @@
 #!/usr/bin/python3
-""" N-queens problem """
-import sys
+"""
+validUTF8
+"""
 
 
-if len(sys.argv) > 2 or len(sys.argv) < 2:
-    print("Usage: nqueens N")
-    exit(1)
+def validUTF8(data):
+    """Determines if a given data set represents a valid UTF-8 encoding"""
+    count = 0
 
-if not sys.argv[1].isdigit():
-    print("N must be a number")
-    exit(1)
+    for x in data:
 
-if int(sys.argv[1]) < 4:
-    print("N must be at least 4")
-    exit(1)
+        if 191 >= x >= 128:
 
-n = int(sys.argv[1])
+            if not count:
+                return False
 
+            count -= 1
+        else:
+            if count:
+                return False
 
-def queens(n, i=0, a=[], b=[], c=[]):
-    """ find possible positions """
-    if i < n:
-        for j in range(n):
-            if j not in a and i + j not in b and i - j not in c:
-                yield from queens(n, i + 1, a + [j], b + [i + j], c + [i - j])
-    else:
-        yield a
+            if x < 128:
+                continue
+            elif x < 224:
+                count = 1
+            elif x < 240:
+                count = 2
+            elif x < 248:
+                count = 3
+            else:
+                return False
 
-
-def solve(n):
-    """ solve """
-    k = []
-    i = 0
-    for solution in queens(n, 0):
-        for s in solution:
-            k.append([i, s])
-            i += 1
-        print(k)
-        k = []
-        i = 0
-
-
-solve(n)
+    return count == 0
