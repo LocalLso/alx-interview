@@ -1,26 +1,36 @@
 #!/usr/bin/python3
-"""
-Defines a method that determines if a given data set
-represents valid UTF-8 encoding
-"""
+"""Challenge UTF-8"""
 
 
 def validUTF8(data):
     """
-    Determines if a given data set represents valid UTF-8 encoding
-
-    parameters:
-        data [list of ints]:
-            each integer represents 1 byte of data
-            data set can contain multiple characters
-            each character in UTF-8 can be 1 to 4 bytes long
-
-    returns:
-        True if data is valid UTF-8 encoding, False otherwise
+    Bit manipulation leetcode.com implementation
+    method that determines if a given data
+    set represents a valid UTF-8 encoding
+    Args:
+        data: data will be represented by a list
+              of integers
+    Return: True if data is a valid UTF-8 encoding,
+            else return False
     """
-    if type(data) is not list:
-        return False
+
+    n_bytes = 0
+
+    m1 = 1 << 7
+    m2 = 1 << 6
+
     for i in data:
-        if type(i) is not int:
-            return False
-    return True
+        m = 1 << 7
+        if n_bytes == 0:
+            while m & i:
+                n_bytes += 1
+                m = m >> 1
+            if n_bytes == 0:
+                continue
+            if n_bytes == 1 or n_bytes > 4:
+                return False
+        else:
+            if not (i & m1 and not (i & m2)):
+                return False
+        n_bytes -= 1
+    return n_bytes == 0
