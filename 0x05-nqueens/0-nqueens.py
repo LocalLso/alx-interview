@@ -1,57 +1,32 @@
 #!/usr/bin/python3
-
+"""solvin N queens puzzle"""
 import sys
 
+if len(sys.argv) != 2:
+        print('Usage: nqueens N')
+        exit(1)
+try:
+    N = int(sys.argv[1])
+except ValueError:
+    print('N must be a number')
+    exit(1)
+if N < 4:
+    print('N must be at least 4')
+    exit(1)
 
-def solve(row, column):
-    solver = [[]]
-    for q in range(row):
-        solver = place_queen(q, column, solver)
-    return solver
-
-
-def place_queen(q, column, prev_solver):
-    solver_queen = []
-    for array in prev_solver:
-        for x in range(column):
-            if is_safe(q, x, array):
-                solver_queen.append(array + [x])
-    return solver_queen
-
-
-def is_safe(q, x, array):
-    if x in array:
-        return (False)
-    else:
-        return all(abs(array[column] - x) != q - column
-                   for column in range(q))
-
-
-def init():
-    if len(sys.argv) != 2:
-        print("Usage: nqueens N")
-        sys.exit(1)
-    if sys.argv[1].isdigit():
-        the_queen = int(sys.argv[1])
-    else:
-        print("N must be a number")
-        sys.exit(1)
-    if the_queen < 4:
-        print("N must be at least 4")
-        sys.exit(1)
-    return(the_queen)
-
-
-def n_queens():
-
-    the_queen = init()
-    solver = solve(the_queen, the_queen)
-    for array in solver:
-        clean = []
-        for q, x in enumerate(array):
-            clean.append([q, x])
-        print(clean)
-
-
-if __name__ == '__main__':
-    n_queens()
+row = 0
+count_row = 2
+for i in range(N-2):
+    res = []
+    count_row += 1
+    n = row
+    for col in range(N):
+        res.append([col, row])
+        if (row + count_row > N-1):
+            row += count_row - 1 - N
+        else:
+            row += count_row
+    print(res)
+    count_row += 1
+    row = n
+exit(0)
